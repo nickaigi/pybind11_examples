@@ -3,7 +3,7 @@
 namespace py = pybind11;
 
 struct Person {
-    Person(const std::string &name, const int &age): name(name), age(age){}
+    Person(const std::string &name, int age): name(name), age(age){}
     void setName(const std::string &name_) { name = name_;}
     void setAge(const int &age_) { age = age_;}
     const std::string &getName() const { return name; }
@@ -15,7 +15,7 @@ struct Person {
 
 PYBIND11_MODULE(person, m){
     py::class_<Person>(m, "Person")
-        .def(py::init<const std::string &, const int &>())
+        .def(py::init<const std::string &, int>())
         .def_readwrite("name", &Person::name)
         .def_readwrite("age", &Person::age)
         .def("setName", &Person::setName)
