@@ -13,9 +13,23 @@ struct Pet {
 };
 
 
+//PYBIND11_MODULE(pet_overloaded, m){
+//    py::class_<Pet>(m, "Pet")
+//        .def(py::init<const std::string &, int>())
+//        .def("set", (void (Pet::*)(int)) &Pet::set, "Set the pet's age")
+//        .def("set", (void (Pet::*)(const std::string &)) &Pet::set, "Set the pet's name");
+//}
+
+
+/*******************************/
+// C++ 14 syntax below: use the -std=c++14
+//
+// $ c++ -O3 -Wall -shared -std=c++14 -fPIC `python3 -m pybind11 --includes` pet_overloaded.cpp -o pet_overloaded`python3-config --extension-suffix`
+//
+/*******************************/
 PYBIND11_MODULE(pet_overloaded, m){
     py::class_<Pet>(m, "Pet")
         .def(py::init<const std::string &, int>())
-        .def("set", (void (Pet::*)(int)) &Pet::set, "Set the pet's age")
-        .def("set", (void (Pet::*)(const std::string &)) &Pet::set, "Set the pet's name");
+        .def("set", py::overload_cast<int>(&Pet::set), "Set the pet's age")
+        .def("set", py::overload_cast<const std::string &>(&Pet::set), "Set the pet's name");
 }
